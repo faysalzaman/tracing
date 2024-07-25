@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tracing/location_sender.dart';
+import 'package:tracing/screens/location_sender.dart';
 import 'package:tracing/screens/map_screen.dart';
 
 class HomeScreen extends StatefulWidget {
