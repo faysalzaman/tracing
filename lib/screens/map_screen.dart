@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
