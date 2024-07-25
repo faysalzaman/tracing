@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -9,7 +7,7 @@ class LocationSender extends StatefulWidget {
   const LocationSender({super.key});
 
   @override
-  _LocationSenderState createState() => _LocationSenderState();
+  State<LocationSender> createState() => _LocationSenderState();
 }
 
 class _LocationSenderState extends State<LocationSender> {
@@ -22,12 +20,21 @@ class _LocationSenderState extends State<LocationSender> {
   @override
   void initState() {
     super.initState();
-    _userId = _auth.currentUser?.uid ??
-        'unknown_user'; // Get the user ID from Firebase Authentication
-    _location.onLocationChanged.listen((LocationData locationData) {
-      _currentLocation = locationData;
-      _sendLocationToServer(_currentLocation);
-    });
+    _initializeUser();
+  }
+
+  void _initializeUser() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      _userId = user.uid;
+      _location.onLocationChanged.listen((LocationData locationData) {
+        _currentLocation = locationData;
+        _sendLocationToServer(_currentLocation);
+      });
+    } else {
+      // Handle user not logged in scenario
+      print('User not logged in');
+    }
   }
 
   void _sendLocationToServer(LocationData locationData) async {

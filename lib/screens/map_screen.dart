@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tracing/provider/markers_provider.dart';
 
 class MapScreen extends StatefulWidget {
@@ -27,7 +26,6 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _initializeMap() async {
     await _getCurrentLocation();
-    await _fetchMarkersAndUpdate();
     setState(() {
       _isMapInitialized = true;
     });
@@ -60,42 +58,10 @@ class _MapScreenState extends State<MapScreen> {
       position: _currentPosition!,
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
     );
-  }
 
-  Future<void> _fetchMarkersAndUpdate() async {
-    try {
-      List<LatLng> newPositions = await _fetchMarkersFromFirebase();
-      _updateMarkers(newPositions);
-    } catch (e) {
-      print('Error fetching markers: $e');
-    }
-  }
-
-  Future<List<LatLng>> _fetchMarkersFromFirebase() async {
-    List<LatLng> markers = [];
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('salesmen').get();
-    for (var document in snapshot.docs) {
-      double latitude = document['latitude'];
-      double longitude = document['longitude'];
-      markers.add(LatLng(latitude, longitude));
-    }
-    return markers;
-  }
-
-  void _updateMarkers(List<LatLng> newPositions) {
-    Set<Marker> newMarkers = newPositions.map((position) {
-      return Marker(
-        markerId: MarkerId(position.toString()),
-        position: position,
-      );
-    }).toSet();
-
-    if (_currentPositionMarker != null) {
-      newMarkers.add(_currentPositionMarker!);
-    }
-
-    Provider.of<MarkerProvider>(context, listen: false).setMarkers(newMarkers);
+    // Update the provider with the current position marker
+    Provider.of<MarkerProvider>(context, listen: false)
+        .addMarker(_currentPositionMarker!);
   }
 
   @override
@@ -116,6 +82,12 @@ class _MapScreenState extends State<MapScreen> {
                       );
                     }
                   },
+                  mapType: MapType.normal,
+                  buildingsEnabled: true,
+                  compassEnabled: true,
+                  rotateGesturesEnabled: true,
+                  scrollGesturesEnabled: true,
+                  trafficEnabled: true,
                   markers: markerProvider.markers,
                   initialCameraPosition: CameraPosition(
                     target: _currentPosition ??
