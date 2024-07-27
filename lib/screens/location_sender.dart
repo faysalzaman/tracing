@@ -60,11 +60,18 @@ class _LocationSenderState extends State<LocationSender> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Location Sender'),
       ),
-      body: const Center(
-        child: Text('Sending location data to server...'),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/icons/ic_car.png'),
+            const Text('Location is being sent to the Agency...'),
+          ],
+        ),
       ),
     );
   }
