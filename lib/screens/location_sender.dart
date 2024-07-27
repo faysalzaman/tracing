@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // For user authentication
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // For user authentication
 
 class LocationSender extends StatefulWidget {
   const LocationSender({super.key});
@@ -33,7 +33,6 @@ class _LocationSenderState extends State<LocationSender> {
       });
     } else {
       // Handle user not logged in scenario
-      print('User not logged in');
     }
   }
 
@@ -54,7 +53,7 @@ class _LocationSenderState extends State<LocationSender> {
         ),
       ); // Merge with existing data if the document exists
     } catch (e) {
-      print('Error sending location to server: $e');
+      // print('Error sending location to server: $e');
     }
   }
 

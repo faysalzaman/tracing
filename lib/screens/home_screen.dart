@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Column(
           children: [
-            Text('Welcome to the home screen!'),
+            const Text('Welcome to the home screen!'),
             // two buttons
 
             // one to navigate to the location sender screen
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      return MapScreen();
+                      return const MapScreen();
                     },
                   ),
                 );
